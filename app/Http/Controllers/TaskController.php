@@ -12,9 +12,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::orderBy('created_at', 'desc')->paginate(10); // Sắp xếp task mới nhất lên đầu
         return view('tasks.index', ['tasks' => $tasks]);
-    }   
+    }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -22,6 +23,7 @@ class TaskController extends Controller
     public function create()
     {
         return view('tasks.create');
+
 
     }
 
@@ -43,7 +45,7 @@ class TaskController extends Controller
         'title' => $request->title,
         'description' => $request->description,
         'long_description' => $request->long_description,
-        'completed' => $completed,
+        'completed' => $request->has('completed'),
     ]);
 
         return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
@@ -75,9 +77,16 @@ class TaskController extends Controller
             'description' => 'required',
         ]);
 
-        $task->update($request->all());
+        // Handle the completed field explicitly
+        $task->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'long_description' => $request->long_description,
+            'completed' => $request->has('completed'),
+        ]);
 
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
+
     }
 
     /**

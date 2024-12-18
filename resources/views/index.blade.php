@@ -15,9 +15,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($tasks as $task)
+                @foreach ($tasks as $index => $task)
                     <tr>
-                        <td>{{ $task->id }}</td>
+                        <td>{{ $tasks->firstItem() + $index }}</td>
                         <td>{{ $task->title }}</td>
                         <td>{{ $task->description }}</td>
                         <td>{{ $task->completed ? 'Hoàn thành' : 'Chưa hoàn thành' }}</td>
