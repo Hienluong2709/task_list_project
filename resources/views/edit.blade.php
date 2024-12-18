@@ -2,32 +2,49 @@
 
 @section('content')
     <div class="container">
-        <h1>Sửa Task</h1>
-        <form action="{{ route('tasks.update', $task->id) }}" method="POST">
-    @csrf
-    @method('PUT')
+        <h1 class="mb-4">Sửa Task</h1>
 
-    <div>
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" value="{{ $task->title }}" required>
-    </div>
+        <form action="{{ route('tasks.update', $task->id) }}" method="POST" class="needs-validation" novalidate>
+            @csrf
+            @method('PUT')
 
-    <div>
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required>{{ $task->description }}</textarea>
-    </div>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <input type="text" class="form-control @error('title') is-invalid @enderror" 
+                    id="title" name="title" value="{{ $task->title }}" required>
+                @error('title')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
 
-    <div>
-        <label for="long_description">Long Description:</label>
-        <textarea id="long_description" name="long_description">{{ $task->long_description }}</textarea>
-    </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <textarea class="form-control @error('description') is-invalid @enderror" 
+                    id="description" name="description" rows="3" required>{{ $task->description }}</textarea>
+                @error('description')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
 
-    <div>
-        <label for="completed">Completed:</label>
-        <input type="checkbox" id="completed" name="completed">
-    </div>
+            <div class="mb-3">
+                <label for="long_description" class="form-label">Long Description:</label>
+                <textarea class="form-control" id="long_description" name="long_description" rows="5">{{ $task->long_description }}</textarea>
+            </div>
 
-    <button type="submit">Update Task</button>
-</form>
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="completed" name="completed" 
+                    {{ $task->completed ? 'checked' : '' }}>
+                <label class="form-check-label" for="completed">Completed</label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Update Task</button>
+                <a href="{{ route('tasks.index') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
 @endsection
